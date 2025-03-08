@@ -64,3 +64,47 @@ app.get('/clientes', async (req, res) => {
         res.status(500).send('Error del servidor');
     }
 });
+
+app.get('/productos', async (req, res) => {
+    try {
+        const clientes = await client.connect();
+        const result = await clientes.query('SELECT * FROM productos');
+        res.json(result.rows);
+        clientes.release();
+    } catch (err) {
+        console.error('Error ejecutando la consulta', err);
+        res.status(500).send('Error del servidor');
+    }
+});
+
+app.post('/clientes', async (req, res) => {
+    try {
+        const { idcliente, nombres, telefono, ciudad, correo } = req.body;
+
+        // Validate that all required fields are present
+        if (!idcliente || !nombres || !telefono || !ciudad || !correo) {
+            return res.status(400).send('Todos los campos son obligatorios');
+        }
+
+        const clientes = await client.connect();
+        const result = await clientes.query('INSERT INTO clientes(idCliente, nombres, telefono, ciudad, correo) VALUES ($1, $2, $3, $4, $5)', [idcliente, nombres, telefono, ciudad, correo]);
+        res.json(result.rows);
+        clientes.release();
+    } catch (err) {
+        console.error('Error ejecutando la consulta', err);
+        res.status(500).send('Error del servidor');
+    }
+});
+
+app.post('/productos', async (req, res) => {
+    try {
+        const { nombre,categoria,precioCompra,stok } = req.body;
+        const clientes = await client.connect();
+        const result = await clientes.query('insert into productos(nombre,categoria,precioCompra,stok) values ($1,$2,$3,$4)', [nombre,categoria,precioCompra,stok]);
+        res.json(result.rows);
+        clientes.release();
+    } catch (err) {
+        console.error('Error ejecutando la consulta', err);
+        res.status(500).send('Error del servidor');
+    }
+});
