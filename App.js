@@ -7,9 +7,9 @@ const port = 3000;
 const users = [{ name: "Jorge", lastname: "Gonzalez" }];
 const client = new Client({
     user: "postgres",
-    host: "192.168.100.163",
-    database: "prueba",
-    password: "postgres",
+    host: "192.168.100.102",
+    database: "Grupo2Tienda",
+    password: "9980720",
     port: 5432
 });
 
